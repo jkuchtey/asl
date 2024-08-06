@@ -12,6 +12,7 @@ def create_cnn():
 
     model.add(layers.Flatten())
     model.add(layers.Dense(64, activation='relu'))
+    #ouput layer: 29 is the numer of labels
     model.add(layers.Dense(29, activation=None))
 
 

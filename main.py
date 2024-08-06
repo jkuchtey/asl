@@ -21,7 +21,7 @@ seed = 12345
 split = 0.7
 epochs = 5
 lr = 0.001
-
+image_size = (180, 180)
 
 train_ds, val_ds = tf.keras.utils.image_dataset_from_directory(
     directory, 
@@ -36,17 +36,15 @@ train_ds, val_ds = tf.keras.utils.image_dataset_from_directory(
 )
 
 class_names = train_ds.class_names
-print(val_ds.class_names)
-
 # show_imgs(train_ds, class_names)
 # ONLY WORKS IF YOU REMOVE labels AND label_mode
 
 
-print(train_ds)
-print(val_ds)
 
+
+# Todo: add image size as create_cnn function param
 ourCNN = create_cnn()
 history = train_cnn(ourCNN, train_ds, val_ds, epochs, lr)
 test_loss, test_acc = ourCNN.evaluate(val_ds, verbose=1)
-
+# classify_single_img(image_size, ourCNN, class_names)
 

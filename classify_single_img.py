@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 
 
 def classify_single_img(image_size, model, class_names):
-    img = keras.utils.load_img('c1.jpg', target_size=image_size)
-    img_array = keras.utils.img_to_array(img)
+    img = tf.keras.utils.load_img('c1.jpg', target_size=image_size)
+    img_array = tf.keras.utils.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)  # Create batch axis
 
     img_predictions = model.predict(img_array)
@@ -16,3 +16,6 @@ def classify_single_img(image_size, model, class_names):
 
     #if you also want to display the image that was passed use the code below
     plt.imshow(img)
+
+
+# DOESN'T WORK YET

@@ -15,9 +15,10 @@ from train_cnn import train_cnn
 from create_cnn import create_cnn
 from show_imgs import show_imgs
 from classify_single_img import classify_single_img
+from handdetection import findImageLandmarks
 
 # This is the folder that contains our training data
-directory = "/Users/jasonkuchtey/Downloads/archive/asl_alphabet_train/asl_alphabet_train"
+directory = "/Users/jasonkuchtey/Desktop/asl_data/archive/asl_alphabet_train/asl_alphabet_train"
 # This random seed makes our results recreateable
 seed = 12345
 # Determines the percentage of data dedicated to training and validation

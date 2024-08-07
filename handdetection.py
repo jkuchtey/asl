@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import csv
 
-def imageToLandmarkCSV(image_path, save_annotated_img, save_csv):
+def findImageLandmarks(image_path, save_annotated_img=False):
     mp_drawing = mp.solutions.drawing_utils
     mp_drawing_styles = mp.solutions.drawing_styles
     mp_hands = mp.solutions.hands
@@ -23,14 +23,7 @@ def imageToLandmarkCSV(image_path, save_annotated_img, save_csv):
 
 
         #Todo: Change this into returning the landmarklist itself so we can put all the image's landmark lists together into one dataframe/csv
-        print(results.multi_hand_landmarks)
-        if save_csv:
-            # df = pd.DataFrame(results.multi_hand_landmarks)
-            # df.to_csv('landmark_locations' + image_path + ".csv")
-            with open('landmark_locations' + image_path + ".csv", 'w') as f:
-                write = csv.writer(f)
-    
-                write.writerows(results.multi_hand_landmarks)
+        # print(results.multi_hand_landmarks)
 
 
 
@@ -53,9 +46,35 @@ def imageToLandmarkCSV(image_path, save_annotated_img, save_csv):
                     mp_drawing_styles.get_default_hand_landmarks_style(),
                     mp_drawing_styles.get_default_hand_connections_style())
                 cv2.imwrite(
-                    image_path + "_annotated.png", cv2.flip(annotated_image, 1))
+                    image_path.replace(".jpg", "") + "_annotated.png", cv2.flip(annotated_image, 1))
+                
+        return results.multi_hand_landmarks
 
 
+def createLandmarkDS(ds, save_CSV=False):
+    labels = os.listdir(ds)
+    labels.remove('.DS_Store')
+    landmarks = {}
+
+    for label in labels:
+        print(label)
+        images = os.listdir(str(ds + "/" + label))
+        for image in images:
+            image_path = str(ds + "/" + label + "/" + image)
+            lm = findImageLandmarks(image_path, False)
+            if lm != None:
+                landmarks[image] = lm
+        break      
+    
+    print(landmarks)
+
+            
+
+        
+
+
+
+createLandmarkDS("/Users/jasonkuchtey/Desktop/asl_data/archive/asl_alphabet_train/asl_alphabet_train")
 
 
 
@@ -120,4 +139,4 @@ def liveDetect(output_dir, save_feed):
 
 
 # liveDetect(output_dir="", save_feed=False)
-imageToLandmarkCSV("f1.jpg", save_annotated_img=False, save_csv=False)
+# findImageLandmarks("f1.jpg", save_annotated_img=False)

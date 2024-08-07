@@ -7,6 +7,12 @@ import uuid
 import numpy as np
 import pandas as pd
 import csv
+import tensorflow as tf
+
+from classify_single_img import classify_single_img
+
+saved_model = "asl_class_50.001.keras"
+
 
 def findImageLandmarks(image_path, save_annotated_img=False):
     mp_drawing = mp.solutions.drawing_utils
@@ -74,11 +80,11 @@ def createLandmarkDS(ds, save_CSV=False):
 
 
 
-createLandmarkDS("/Users/jasonkuchtey/Desktop/asl_data/archive/asl_alphabet_train/asl_alphabet_train")
+# createLandmarkDS("/Users/jasonkuchtey/Desktop/asl_data/archive/asl_alphabet_train/asl_alphabet_train")
 
 
 
-def liveDetect(output_dir, save_feed):
+def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None, image_size=None):
     mp_drawing = mp.solutions.drawing_utils
     mp_hands = mp.solutions.hands
 
@@ -110,15 +116,22 @@ def liveDetect(output_dir, save_feed):
             # Rendering results
             # If there is a hand in the feed
             if results.multi_hand_landmarks:
-                print(results.multi_hand_landmarks)
+                # print(results.multi_hand_landmarks)
                 
+                if predict:
+                    model = tf.keras.models.load_model(saved_model)
+                    image = image[0:image_size, 0:image_size]
+                    classify_single_img(image, image_size, model, class_names, npimage=True)
+                    
+
+
                 #For every hand
-                for num, hand in enumerate(results.multi_hand_landmarks):
-                    # Draw every landmark for that hand
-                    mp_drawing.draw_landmarks(image, hand, mp_hands.HAND_CONNECTIONS, 
-                                            mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2, circle_radius=4),
-                                            mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2),
-                                            )
+                # for num, hand in enumerate(results.multi_hand_landmarks):
+                #     # Draw every landmark for that hand
+                #     mp_drawing.draw_landmarks(image, hand, mp_hands.HAND_CONNECTIONS, 
+                #                             mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2, circle_radius=4),
+                #                             mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2),
+                #                             )
 
 
                 if save_feed:

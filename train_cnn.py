@@ -2,7 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import layers, models
 
 
-def train_cnn(model, train_ds, val_ds, epochs, lr, save):
+def train_cnn(model, train_ds, val_ds, epochs, lr, save, model_name=False):
     optimizer = tf.keras.optimizers.Adam(learning_rate=lr)
 
     model.compile(optimizer=optimizer,
@@ -18,7 +18,8 @@ def train_cnn(model, train_ds, val_ds, epochs, lr, save):
         callbacks = [csv_logger]
     )
     if save:
-        model_name = "asl_class_" + str(epochs) + str(lr) + ".keras"
+        if not model_name:
+            model_name = "asl_class_" + str(epochs) + str(lr) + ".keras"
         model.save(model_name)
 
     return history

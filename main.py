@@ -15,7 +15,7 @@ from train_cnn import train_cnn
 from create_cnn import create_cnn
 from show_imgs import show_imgs
 from classify_single_img import classify_single_img
-from handdetection import findImageLandmarks
+from handdetection import liveDetect
 
 # This is the folder that contains our training data
 directory = "/Users/jasonkuchtey/Desktop/asl_data/archive/asl_alphabet_train/asl_alphabet_train"
@@ -30,7 +30,7 @@ lr = 0.001
 # If we want to check a single image, input the filename here
 image = "f1.jpg"
 # What size our images will be adjusted to
-image_size = 50
+image_size = 100
 # If true, our model will be saved as a .keras model with the learning rate and epoch count in the title
 save = False
 # If we want to use a saved model, put filename here
@@ -63,9 +63,9 @@ if save:
 else:
     model = tf.keras.models.load_model(saved_model)
     # test_loss, test_acc = model.evaluate(val_ds, verbose=1)
-    classify_single_img(image, image_size, model, class_names)
+    # classify_single_img(image, image_size, model, class_names)
 
 
+# liveDetect(predict=True, class_names=class_names, image_size=image_size)
 
-
-classify_single_img(image, image_size, ourCNN, class_names)
+# classify_single_img(image, image_size, ourCNN, class_names)

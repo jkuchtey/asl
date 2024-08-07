@@ -27,13 +27,14 @@ epochs = 5
 # Determines how often our weights are adjusted
 lr = 0.001
 # If we want to check a single image, input the filename here
-image = "c1.jpg"
+image = "f1.jpg"
 # What size our images will be adjusted to
 image_size = 50
 # If true, our model will be saved as a .keras model with the learning rate and epoch count in the title
 save = False
 # If we want to use a saved model, put filename here
 saved_model = "asl_class_50.001.keras"
+
 
 train_ds, val_ds = tf.keras.utils.image_dataset_from_directory(
     directory, 
@@ -66,5 +67,4 @@ else:
 
 
 
-# classify_single_img(image, image_size, ourCNN, class_names)
-
+classify_single_img(image, image_size, ourCNN, class_names)

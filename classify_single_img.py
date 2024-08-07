@@ -4,12 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def classify_single_img(image_size, model, class_names):
-    img = tf.keras.utils.load_img('c1.jpg', target_size=image_size)
+def classify_single_img(image, image_size, model, class_names):
+    img = tf.keras.utils.load_img(image, target_size=(image_size, image_size))
     img_array = tf.keras.utils.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)  # Create batch axis
 
     img_predictions = model.predict(img_array)
+    print(img_predictions)
 
     pred_label = class_names[np.argmax(np.round(img_predictions,2))]
     print(" Predicted label is :: "+ pred_label)

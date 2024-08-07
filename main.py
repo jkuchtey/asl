@@ -16,12 +16,24 @@ from create_cnn import create_cnn
 from show_imgs import show_imgs
 from classify_single_img import classify_single_img
 
+# This is the folder that contains our training data
 directory = "/Users/jasonkuchtey/Downloads/archive/asl_alphabet_train/asl_alphabet_train"
+# This random seed makes our results recreateable
 seed = 12345
+# Determines the percentage of data dedicated to training and validation
 split = 0.7
+# How many epochs our model will trainfor
 epochs = 5
+# Determines how often our weights are adjusted
 lr = 0.001
-image_size = (180, 180)
+# If we want to check a single image, input the filename here
+image = "c1.jpg"
+# What size our images will be adjusted to
+image_size = 50
+# If true, our model will be saved as a .keras model with the learning rate and epoch count in the title
+save = False
+# If we want to use a saved model, put filename here
+saved_model = "asl_class_50.001.keras"
 
 train_ds, val_ds = tf.keras.utils.image_dataset_from_directory(
     directory, 
@@ -31,7 +43,7 @@ train_ds, val_ds = tf.keras.utils.image_dataset_from_directory(
     subset="both", 
     label_mode="categorical", 
     labels="inferred", 
-    image_size=(32, 32), 
+    image_size=(image_size, image_size), 
     batch_size=32
 )
 
@@ -41,10 +53,18 @@ class_names = train_ds.class_names
 
 
 
-
 # Todo: add image size as create_cnn function param
-ourCNN = create_cnn()
-history = train_cnn(ourCNN, train_ds, val_ds, epochs, lr)
-test_loss, test_acc = ourCNN.evaluate(val_ds, verbose=1)
-# classify_single_img(image_size, ourCNN, class_names)
+if save:
+    ourCNN = create_cnn(image_size)
+    history = train_cnn(ourCNN, train_ds, val_ds, epochs, lr, save)
+    test_loss, test_acc = ourCNN.evaluate(val_ds, verbose=1)
+else:
+    model = tf.keras.models.load_model(saved_model)
+    # test_loss, test_acc = model.evaluate(val_ds, verbose=1)
+    classify_single_img(image, image_size, model, class_names)
+
+
+
+
+# classify_single_img(image, image_size, ourCNN, class_names)
 

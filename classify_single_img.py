@@ -7,6 +7,7 @@ from PIL import Image
 
 def classify_single_img(image, image_size, model, class_names, npimage=False):
     if not npimage:
+        print("FART")
         img = tf.keras.utils.load_img(image, target_size=(image_size, image_size))
     else:
         img = tf.keras.utils.array_to_img(image, scale=True)

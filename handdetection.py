@@ -120,8 +120,8 @@ def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None
                 
                 if predict:
                     model = tf.keras.models.load_model(saved_model)
-                    image = image[0:image_size, 0:image_size]
-                    classify_single_img(image, image_size, model, class_names, npimage=True)
+                    resized = cv2.resize(image, dsize=(image_size, image_size), interpolation=cv2.INTER_LINEAR)
+                    classify_single_img(resized, image_size, model, class_names, npimage=True)
                     
 
 
@@ -133,10 +133,10 @@ def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None
                 #                             mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2),
                 #                             )
 
-
+                fcount = 0
                 if save_feed:
-                    cv2.imwrite(os.path.join('Output Images', '{}.jpg'.format(uuid.uuid1())), image)
-
+                    cv2.imwrite(os.path.join(output_dir, '{}.jpg'.format(uuid.uuid1())), image)
+                    fcount += 1
 
             #Displays webcam feed
             
@@ -151,5 +151,5 @@ def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None
 
 
 
-# liveDetect(output_dir="", save_feed=False)
+# liveDetect(output_dir="A", save_feed=True)
 # findImageLandmarks("f1.jpg", save_annotated_img=False)

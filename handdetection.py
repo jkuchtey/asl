@@ -84,7 +84,7 @@ def createLandmarkDS(ds, save_CSV=False):
 
 
 
-def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None, image_size=None):
+def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None, image_size=None, draw=False):
     mp_drawing = mp.solutions.drawing_utils
     mp_hands = mp.solutions.hands
 
@@ -124,14 +124,14 @@ def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None
                     classify_single_img(resized, image_size, model, class_names, npimage=True)
                     
 
-
-                #For every hand
-                # for num, hand in enumerate(results.multi_hand_landmarks):
-                #     # Draw every landmark for that hand
-                #     mp_drawing.draw_landmarks(image, hand, mp_hands.HAND_CONNECTIONS, 
-                #                             mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2, circle_radius=4),
-                #                             mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2),
-                #                             )
+                if draw:
+                    # For every hand
+                    for num, hand in enumerate(results.multi_hand_landmarks):
+                        # Draw every landmark for that hand
+                        mp_drawing.draw_landmarks(image, hand, mp_hands.HAND_CONNECTIONS, 
+                                                mp_drawing.DrawingSpec(color=(0, 0, 0), thickness=2, circle_radius=4),
+                                                mp_drawing.DrawingSpec(color=(250, 44, 250), thickness=2, circle_radius=2),
+                                                )
 
                 fcount = 0
                 if save_feed:
@@ -151,5 +151,5 @@ def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None
 
 
 
-# liveDetect(output_dir="A", save_feed=True)
+liveDetect(draw=True)
 # findImageLandmarks("f1.jpg", save_annotated_img=False)

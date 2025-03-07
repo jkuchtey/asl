@@ -65,9 +65,9 @@ if save:
     # classify_single_img(image, image_size, ourCNN, class_names)
 else:
     model = tf.keras.models.load_model(saved_model)
-    # test_loss, test_acc = model.evaluate(val_ds, verbose=1)
+    test_loss, test_acc = model.evaluate(val_ds, verbose=1)
     classify_single_img(image, image_size, model, class_names)
 
 
-# liveDetect(predict=True, class_names=class_names, image_size=image_size)
+liveDetect(predict=True, class_names=class_names, image_size=image_size)
 

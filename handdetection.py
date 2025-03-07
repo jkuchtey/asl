@@ -14,11 +14,18 @@ from classify_single_img import classify_single_img
 saved_model = "asl_class_50.001.keras"
 
 
+# image_path: the specific image we are trying to find landmarks for
+# save_annotated_img: if true, saves the image with the landmarks drawn on it
+# returns: the landmarks of the image
+
 def findImageLandmarks(image_path, save_annotated_img=False):
+    # Initialize MediaPipe Hands.
     mp_drawing = mp.solutions.drawing_utils
     mp_drawing_styles = mp.solutions.drawing_styles
     mp_hands = mp.solutions.hands
 
+    # Read an image, flip it around y-axis for correct handedness output (see
+    # above).
     with mp_hands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.5) as hands: 
         static_image_mode = True
         #flip for correct hand
@@ -28,23 +35,42 @@ def findImageLandmarks(image_path, save_annotated_img=False):
         results = hands.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
 
 
-        #Todo: Change this into returning the landmarklist itself so we can put all the image's landmark lists together into one dataframe/csv
-        # print(results.multi_hand_landmarks)
+        # saves all landmarks to an array;
+        resArr = [[] * 3] * 21
+        # for every hand in the image
+        for hand_landmarks in results.multi_hand_landmarks:
+            # for each landmark in the hand
+            for i in range(21):
+                # save the x y and z coordinate to the result array
+                resArr[i] = [hand_landmarks.landmark[i].x, hand_landmarks.landmark[i].x, hand_landmarks.landmark[i].z]
 
+        # TODO: save resArr to a csv file with handdedness and handct of the image. Maybe only save one hand?
 
-
+        # Saves image with landmarks drawn on it
+        # This is useful for knowing that the landmarks are being detected correctly, but really what we want is an array of landmark coordinates. 
         if save_annotated_img:
+            # Detects if it is a left or right hand
             print('Handedness:', results.multi_handedness)
 
+            # Creates new copy of the image being processed
             image_height, image_width, _ = image.shape
             annotated_image = image.copy()
+            # For every landmar in the image
             for hand_landmarks in results.multi_hand_landmarks:
+                # prints every landmark
                 print('hand_landmarks:', hand_landmarks)
+
+
+                # prints the coordinates of the index finger tip landmark. shows we can access a specific landmark by name.
                 print(
                     f'Index finger tip coordinates: (',
                     f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x * image_width}, '
                     f'{hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y * image_height})'
                 )
+                
+                
+
+                #draws landmarks onto image
                 mp_drawing.draw_landmarks(
                     annotated_image,
                     hand_landmarks,
@@ -151,5 +177,5 @@ def liveDetect(output_dir=None, save_feed=False, predict=False, class_names=None
 
 
 
-liveDetect(draw=True)
-# findImageLandmarks("f1.jpg", save_annotated_img=False)
+# liveDetect(draw=True)
+findImageLandmarks("f1.jpg", save_annotated_img=False)
